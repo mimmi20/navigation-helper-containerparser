@@ -21,7 +21,7 @@ interface ContainerParserInterface
     /**
      * Verifies container and eventually fetches it from service locator if it is a string
      *
-     * @param int|Navigation\ContainerInterface|string|null $container
+     * @param AbstractContainer|int|Navigation\ContainerInterface|string|null $container
      *
      * @return AbstractContainer|Navigation\ContainerInterface|null
      *

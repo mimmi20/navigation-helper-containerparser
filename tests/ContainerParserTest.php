@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace Mimmi20Test\NavigationHelper\ContainerParser;
 
 use Interop\Container\ContainerInterface;
+use Laminas\Navigation\AbstractContainer;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Mezzio\Navigation\Navigation;
@@ -247,6 +248,28 @@ final class ContainerParserTest extends TestCase
     public function testParseContainerWithContainer(): void
     {
         $container      = $this->createMock(\Mezzio\Navigation\ContainerInterface::class);
+        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+
+        assert($serviceLocator instanceof ContainerInterface);
+        $helper = new ContainerParser($serviceLocator);
+
+        self::assertSame($container, $helper->parseContainer($container));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws Exception
+     */
+    public function testParseContainerWithContainer2(): void
+    {
+        $container      = $this->createMock(AbstractContainer::class);
         $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
