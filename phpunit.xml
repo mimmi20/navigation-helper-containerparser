@@ -32,7 +32,7 @@
         <ini name="intl.use_exceptions" value="1"/>
     </php>
 
-    <testsuite name="Template Test Suite">
+    <testsuite name="navigation-helper-containerparser Test Suite">
         <directory>tests/</directory>
     </testsuite>
 
