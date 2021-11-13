@@ -18,6 +18,7 @@ use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Mezzio\Navigation;
 use Psr\Container\ContainerExceptionInterface;
 
+use function assert;
 use function in_array;
 use function is_string;
 use function sprintf;
@@ -65,6 +66,8 @@ final class ContainerParser implements ContainerParserInterface
                         );
                     }
 
+                    assert($container instanceof Navigation\ContainerInterface);
+
                     return $container;
                 }
 
@@ -79,6 +82,8 @@ final class ContainerParser implements ContainerParserInterface
                             $e
                         );
                     }
+
+                    assert($container instanceof Navigation\ContainerInterface);
 
                     return $container;
                 }
@@ -96,6 +101,8 @@ final class ContainerParser implements ContainerParserInterface
                     $e
                 );
             }
+
+            assert($container instanceof Navigation\ContainerInterface);
 
             return $container;
         }
