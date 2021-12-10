@@ -1,9 +1,8 @@
 {
   "name": "mimmi20/navigation-helper-containerparser",
-  "type": "library",
   "description": "Provides a container-parser helper for Laminas- and Mezzio Navigation",
-  "homepage": "https://github.com/mimmi20/navigation-helper-containerparser",
   "license": "MIT",
+  "type": "library",
   "authors": [
     {
       "name": "Thomas Müller",
@@ -11,14 +10,20 @@
       "role": "Developer"
     }
   ],
+  "homepage": "https://github.com/mimmi20/navigation-helper-containerparser",
+  "support": {
+    "issues": "https://github.com/mimmi20/navigation-helper-containerparser/issues",
+    "source": "https://github.com/mimmi20/navigation-helper-containerparser"
+  },
   "require": {
     "php": "^7.4.3 || ^8.0.0",
     "ext-mbstring": "*"
   },
   "require-dev": {
+    "ergebnis/composer-normalize": "^2.18.0",
     "laminas/laminas-dependency-plugin": "^2.2.0",
     "laminas/laminas-modulemanager": "^2.11.0",
-    "laminas/laminas-navigation": "^2.11.1",
+    "laminas/laminas-navigation": "^2.12.0",
     "laminas/laminas-servicemanager": "^3.10.0",
     "mimmi20/coding-standard": "^2.5.1",
     "mimmi20/mezzio-navigation": "^2.0.7",
@@ -27,7 +32,7 @@
     "phpstan/phpstan-deprecation-rules": "^1.0.0",
     "phpstan/phpstan-phpunit": "^1.0.0",
     "phpunit/phpunit": "^9.5.10",
-    "rector/rector": "^0.12.5"
+    "rector/rector": "^0.12.7"
   },
   "suggest": {
     "ext-intl": "required to use the Translator",
@@ -36,16 +41,6 @@
     "laminas/laminas-navigation": "Required to use with Laminas",
     "laminas/laminas-servicemanager": "Required to use the navigation factories",
     "mimmi20/mezzio-navigation": "Required to use with Mezzio"
-  },
-  "config": {
-    "preferred-install": "dist",
-    "sort-packages": true
-  },
-  "extra": {
-    "laminas": {
-      "component": "Mimmi20\\NavigationHelper\\ContainerParser",
-      "config-provider": "Mimmi20\\NavigationHelper\\ContainerParser\\ConfigProvider"
-    }
   },
   "autoload": {
     "psr-4": {
@@ -57,8 +52,14 @@
       "Mimmi20Test\\NavigationHelper\\ContainerParser\\": "tests/"
     }
   },
-  "support": {
-    "issues": "https://github.com/mimmi20/navigation-helper-containerparser/issues",
-    "source": "https://github.com/mimmi20/navigation-helper-containerparser"
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "extra": {
+    "laminas": {
+      "component": "Mimmi20\\NavigationHelper\\ContainerParser",
+      "config-provider": "Mimmi20\\NavigationHelper\\ContainerParser\\ConfigProvider"
+    }
   }
 }
