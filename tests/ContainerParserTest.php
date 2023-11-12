@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/navigation-helper-containerparser package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace Mimmi20Test\NavigationHelper\ContainerParser;
 
-use Interop\Container\ContainerInterface;
 use Laminas\Navigation\AbstractContainer;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
@@ -20,6 +19,7 @@ use Mezzio\Navigation\Navigation;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParser;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 use function assert;
 use function sprintf;
@@ -28,7 +28,6 @@ final class ContainerParserTest extends TestCase
 {
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws InvalidArgumentException
      */
     public function testParseContainerWithNull(): void
@@ -41,7 +40,6 @@ final class ContainerParserTest extends TestCase
         $serviceLocator->expects(self::never())
             ->method('get');
 
-        assert($serviceLocator instanceof ContainerInterface);
         $helper = new ContainerParser($serviceLocator);
 
         self::assertNull($helper->parseContainer(null));
@@ -65,7 +63,9 @@ final class ContainerParserTest extends TestCase
         $helper = new ContainerParser($serviceLocator);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Container must be a string alias or an instance of Mezzio\Navigation\ContainerInterface');
+        $this->expectExceptionMessage(
+            'Container must be a string alias or an instance of Mezzio\Navigation\ContainerInterface',
+        );
         $this->expectExceptionCode(0);
 
         $helper->parseContainer(1);
@@ -101,7 +101,6 @@ final class ContainerParserTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws InvalidArgumentException
      */
     public function testParseContainerWithStringDefaultFound(): void
@@ -137,10 +136,22 @@ final class ContainerParserTest extends TestCase
         $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $serviceLocator->expects(self::exactly(2))
+        $matcher        = self::exactly(2);
+        $serviceLocator->expects($matcher)
             ->method('has')
-            ->withConsecutive([Navigation::class], [$name])
-            ->willReturnOnConsecutiveCalls(false, true);
+            ->willReturnCallback(
+                static function (string $id) use ($matcher, $name): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(Navigation::class, $id),
+                        default => self::assertSame($name, $id),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
+            );
         $serviceLocator->expects(self::once())
             ->method('get')
             ->with($name)
@@ -158,7 +169,6 @@ final class ContainerParserTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws InvalidArgumentException
      */
     public function testParseContainerWithStringNavigationFound(): void
@@ -169,10 +179,22 @@ final class ContainerParserTest extends TestCase
         $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $serviceLocator->expects(self::exactly(2))
+        $matcher        = self::exactly(2);
+        $serviceLocator->expects($matcher)
             ->method('has')
-            ->withConsecutive([Navigation::class], [$name])
-            ->willReturnOnConsecutiveCalls(false, true);
+            ->willReturnCallback(
+                static function (string $id) use ($matcher, $name): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(Navigation::class, $id),
+                        default => self::assertSame($name, $id),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
+            );
         $serviceLocator->expects(self::once())
             ->method('get')
             ->with($name)
@@ -195,10 +217,19 @@ final class ContainerParserTest extends TestCase
         $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $serviceLocator->expects(self::exactly(2))
+        $matcher        = self::exactly(2);
+        $serviceLocator->expects($matcher)
             ->method('has')
-            ->withConsecutive([Navigation::class], ['navigation'])
-            ->willReturnOnConsecutiveCalls(false, false);
+            ->willReturnCallback(
+                static function (string $id) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(Navigation::class, $id),
+                        default => self::assertSame('navigation', $id),
+                    };
+
+                    return false;
+                },
+            );
         $serviceLocator->expects(self::once())
             ->method('get')
             ->with($name)
@@ -216,7 +247,6 @@ final class ContainerParserTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws InvalidArgumentException
      */
     public function testParseContainerWithStringFound(): void
@@ -242,7 +272,6 @@ final class ContainerParserTest extends TestCase
 
     /**
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      */
     public function testParseContainerWithContainer(): void
@@ -264,7 +293,6 @@ final class ContainerParserTest extends TestCase
 
     /**
      * @throws InvalidArgumentException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      */
     public function testParseContainerWithContainer2(): void
