@@ -12,11 +12,11 @@ declare(strict_types = 1);
 
 namespace Mimmi20Test\NavigationHelper\ContainerParser;
 
-use Interop\Container\ContainerInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParser;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserFactory;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 use function assert;
 
@@ -40,7 +40,7 @@ final class ContainerParserFactoryTest extends TestCase
             ->method('get');
 
         assert($container instanceof ContainerInterface);
-        $helper = ($this->factory)($container);
+        $helper = ($this->factory)($container, '');
 
         self::assertInstanceOf(ContainerParser::class, $helper);
     }
