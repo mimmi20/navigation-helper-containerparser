@@ -12,17 +12,26 @@ declare(strict_types = 1);
 
 namespace Mimmi20\NavigationHelper\ContainerParser;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 final class ContainerParserFactory
 {
     /**
      * Create and return a navigation view helper instance.
      *
+     * @param string            $requestedName
+     * @param array<mixed>|null $options
+     *
      * @throws void
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
-    public function __invoke(ContainerInterface $container): ContainerParser
-    {
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
+        array | null $options = null,
+    ): ContainerParser {
         return new ContainerParser($container);
     }
 }
