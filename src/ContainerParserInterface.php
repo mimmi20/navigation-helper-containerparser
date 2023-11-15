@@ -15,20 +15,19 @@ namespace Mimmi20\NavigationHelper\ContainerParser;
 use Laminas\Navigation\AbstractContainer;
 use Laminas\Navigation\Page\AbstractPage;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
-use Mezzio\Navigation;
 
 interface ContainerParserInterface
 {
     /**
      * Verifies container and eventually fetches it from service locator if it is a string
      *
-     * @param AbstractContainer<AbstractPage>|int|Navigation\ContainerInterface|string|null $container
+     * @param AbstractContainer<AbstractPage>|int|string|null $container
      *
-     * @return AbstractContainer<AbstractPage>|Navigation\ContainerInterface|null
+     * @return AbstractContainer<AbstractPage>|null
      *
      * @throws InvalidArgumentException
      */
     public function parseContainer(
-        AbstractContainer | int | Navigation\ContainerInterface | string | null $container = null,
-    ): AbstractContainer | Navigation\ContainerInterface | null;
+        AbstractContainer | int | string | null $container = null,
+    ): AbstractContainer | null;
 }
