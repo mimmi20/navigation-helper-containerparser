@@ -20,6 +20,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 use function assert;
+use function get_debug_type;
 use function in_array;
 use function is_string;
 use function sprintf;
@@ -84,7 +85,15 @@ final class ContainerParser implements ContainerParserInterface
                         );
                     }
 
-                    assert($container instanceof Navigation\ContainerInterface);
+                    assert(
+                        $container instanceof Navigation\ContainerInterface || $container instanceof AbstractContainer,
+                        sprintf(
+                            '$container should be an Instance of %s or %s, but was %s',
+                            Navigation\ContainerInterface::class,
+                            AbstractContainer::class,
+                            get_debug_type($container),
+                        ),
+                    );
 
                     return $container;
                 }
@@ -103,7 +112,15 @@ final class ContainerParser implements ContainerParserInterface
                 );
             }
 
-            assert($container instanceof Navigation\ContainerInterface);
+            assert(
+                $container instanceof Navigation\ContainerInterface || $container instanceof AbstractContainer,
+                sprintf(
+                    '$container should be an Instance of %s or %s, but was %s',
+                    Navigation\ContainerInterface::class,
+                    AbstractContainer::class,
+                    get_debug_type($container),
+                ),
+            );
 
             return $container;
         }
