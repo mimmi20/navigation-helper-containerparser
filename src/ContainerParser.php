@@ -12,10 +12,10 @@ declare(strict_types = 1);
 
 namespace Mimmi20\NavigationHelper\ContainerParser;
 
+use Laminas\Navigation;
 use Laminas\Navigation\AbstractContainer;
 use Laminas\Navigation\Page\AbstractPage;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
-use Mezzio\Navigation;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
@@ -36,20 +36,16 @@ final class ContainerParser implements ContainerParserInterface
     /**
      * Verifies container and eventually fetches it from service locator if it is a string
      *
-     * @param AbstractContainer<AbstractPage>|int|Navigation\ContainerInterface|string|null $container
+     * @param AbstractContainer<AbstractPage>|int|string|null $container
      *
-     * @return AbstractContainer<AbstractPage>|Navigation\ContainerInterface|null
+     * @return AbstractContainer<AbstractPage>|null
      *
      * @throws InvalidArgumentException
      */
     public function parseContainer(
-        AbstractContainer | int | Navigation\ContainerInterface | string | null $container = null,
-    ): AbstractContainer | Navigation\ContainerInterface | null {
-        if (
-            $container === null
-            || $container instanceof Navigation\ContainerInterface
-            || $container instanceof AbstractContainer
-        ) {
+        AbstractContainer | int | string | null $container = null,
+    ): AbstractContainer | null {
+        if ($container === null || $container instanceof AbstractContainer) {
             return $container;
         }
 
@@ -68,7 +64,14 @@ final class ContainerParser implements ContainerParserInterface
                         );
                     }
 
-                    assert($container instanceof Navigation\ContainerInterface);
+                    assert(
+                        $container instanceof AbstractContainer,
+                        sprintf(
+                            '$container should be an Instance of %s, but was %s',
+                            AbstractContainer::class,
+                            get_debug_type($container),
+                        ),
+                    );
 
                     return $container;
                 }
@@ -86,10 +89,9 @@ final class ContainerParser implements ContainerParserInterface
                     }
 
                     assert(
-                        $container instanceof Navigation\ContainerInterface || $container instanceof AbstractContainer,
+                        $container instanceof AbstractContainer,
                         sprintf(
-                            '$container should be an Instance of %s or %s, but was %s',
-                            Navigation\ContainerInterface::class,
+                            '$container should be an Instance of %s, but was %s',
                             AbstractContainer::class,
                             get_debug_type($container),
                         ),
@@ -113,10 +115,9 @@ final class ContainerParser implements ContainerParserInterface
             }
 
             assert(
-                $container instanceof Navigation\ContainerInterface || $container instanceof AbstractContainer,
+                $container instanceof AbstractContainer,
                 sprintf(
-                    '$container should be an Instance of %s or %s, but was %s',
-                    Navigation\ContainerInterface::class,
+                    '$container should be an Instance of %s, but was %s',
                     AbstractContainer::class,
                     get_debug_type($container),
                 ),
@@ -127,8 +128,7 @@ final class ContainerParser implements ContainerParserInterface
 
         throw new InvalidArgumentException(
             sprintf(
-                'Container must be a string alias or an instance of %s or an instance of %s',
-                Navigation\ContainerInterface::class,
+                'Container must be a string alias or an instance of %s',
                 AbstractContainer::class,
             ),
         );
