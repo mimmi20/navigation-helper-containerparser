@@ -12,9 +12,10 @@ declare(strict_types = 1);
 
 namespace Mimmi20\NavigationHelper\ContainerParser;
 
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
-final class ContainerParserFactory
+final class ContainerParserFactory implements FactoryInterface
 {
     /**
      * Create and return a navigation view helper instance.
