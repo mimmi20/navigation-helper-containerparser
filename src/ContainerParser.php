@@ -12,10 +12,12 @@ declare(strict_types = 1);
 
 namespace Mimmi20\NavigationHelper\ContainerParser;
 
-use Laminas\Navigation;
 use Laminas\Navigation\AbstractContainer;
+use Laminas\Navigation\Navigation as LaminasNavigation;
 use Laminas\Navigation\Page\AbstractPage;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
+use Mimmi20\Mezzio\Navigation\Navigation as MezzioNavigation;
+use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
@@ -36,16 +38,20 @@ final class ContainerParser implements ContainerParserInterface
     /**
      * Verifies container and eventually fetches it from service locator if it is a string
      *
-     * @param AbstractContainer<AbstractPage>|int|string|null $container
+     * @param AbstractContainer<AbstractPage>|int|\Mimmi20\Mezzio\Navigation\ContainerInterface<PageInterface>|string|null $container
      *
-     * @return AbstractContainer<AbstractPage>|null
+     * @return AbstractContainer<AbstractPage>|\Mimmi20\Mezzio\Navigation\ContainerInterface<PageInterface>|null
      *
      * @throws InvalidArgumentException
      */
     public function parseContainer(
-        AbstractContainer | int | string | null $container = null,
-    ): AbstractContainer | null {
-        if ($container === null || $container instanceof AbstractContainer) {
+        AbstractContainer | int | \Mimmi20\Mezzio\Navigation\ContainerInterface | string | null $container = null,
+    ): AbstractContainer | \Mimmi20\Mezzio\Navigation\ContainerInterface | null {
+        if (
+            $container === null
+            || $container instanceof \Mimmi20\Mezzio\Navigation\ContainerInterface
+            || $container instanceof AbstractContainer
+        ) {
             return $container;
         }
 
@@ -53,12 +59,35 @@ final class ContainerParser implements ContainerParserInterface
             // Fallback
             if (in_array($container, ['default', 'navigation'], true)) {
                 // Uses class name
-                if ($this->serviceLocator->has(Navigation\Navigation::class)) {
+                if ($this->serviceLocator->has(MezzioNavigation::class)) {
                     try {
-                        $container = $this->serviceLocator->get(Navigation\Navigation::class);
+                        $container = $this->serviceLocator->get(MezzioNavigation::class);
                     } catch (ContainerExceptionInterface $e) {
                         throw new InvalidArgumentException(
-                            sprintf('Could not load Container "%s"', Navigation\Navigation::class),
+                            sprintf('Could not load Container "%s"', MezzioNavigation::class),
+                            0,
+                            $e,
+                        );
+                    }
+
+                    assert(
+                        $container instanceof \Mimmi20\Mezzio\Navigation\ContainerInterface,
+                        sprintf(
+                            '$container should be an Instance of %s, but was %s',
+                            \Mimmi20\Mezzio\Navigation\ContainerInterface::class,
+                            get_debug_type($container),
+                        ),
+                    );
+
+                    return $container;
+                }
+
+                if ($this->serviceLocator->has(LaminasNavigation::class)) {
+                    try {
+                        $container = $this->serviceLocator->get(LaminasNavigation::class);
+                    } catch (ContainerExceptionInterface $e) {
+                        throw new InvalidArgumentException(
+                            sprintf('Could not load Container "%s"', LaminasNavigation::class),
                             0,
                             $e,
                         );
@@ -89,9 +118,10 @@ final class ContainerParser implements ContainerParserInterface
                     }
 
                     assert(
-                        $container instanceof AbstractContainer,
+                        $container instanceof \Mimmi20\Mezzio\Navigation\ContainerInterface || $container instanceof AbstractContainer,
                         sprintf(
-                            '$container should be an Instance of %s, but was %s',
+                            '$container should be an Instance of %s or %s, but was %s',
+                            \Mimmi20\Mezzio\Navigation\ContainerInterface::class,
                             AbstractContainer::class,
                             get_debug_type($container),
                         ),
@@ -115,9 +145,10 @@ final class ContainerParser implements ContainerParserInterface
             }
 
             assert(
-                $container instanceof AbstractContainer,
+                $container instanceof \Mimmi20\Mezzio\Navigation\ContainerInterface || $container instanceof AbstractContainer,
                 sprintf(
-                    '$container should be an Instance of %s, but was %s',
+                    '$container should be an Instance of %s or %s, but was %s',
+                    \Mimmi20\Mezzio\Navigation\ContainerInterface::class,
                     AbstractContainer::class,
                     get_debug_type($container),
                 ),
@@ -128,7 +159,8 @@ final class ContainerParser implements ContainerParserInterface
 
         throw new InvalidArgumentException(
             sprintf(
-                'Container must be a string alias or an instance of %s',
+                'Container must be a string alias or an instance of %s or an instance of %s',
+                \Mimmi20\Mezzio\Navigation\ContainerInterface::class,
                 AbstractContainer::class,
             ),
         );
