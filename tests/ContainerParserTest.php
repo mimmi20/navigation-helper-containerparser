@@ -110,6 +110,48 @@ final class ContainerParserTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      */
+    public function testParseContainerWithStringDefaultNotFound2(): void
+    {
+        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $matcher        = self::exactly(2);
+        $serviceLocator->expects($matcher)
+            ->method('has')
+            ->willReturnCallback(
+                static function (string $id) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(MezzioNavigation::class, $id),
+                        default => self::assertSame(LaminasNavigation::class, $id),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => true,
+                        default => false,
+                    };
+                },
+            );
+        $serviceLocator->expects(self::once())
+            ->method('get')
+            ->with(LaminasNavigation::class)
+            ->willThrowException(new ServiceNotFoundException('test'));
+
+        assert($serviceLocator instanceof ContainerInterface);
+        $helper = new ContainerParser($serviceLocator);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            sprintf('Could not load Container "%s"', LaminasNavigation::class),
+        );
+        $this->expectExceptionCode(0);
+
+        $helper->parseContainer('default');
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
     public function testParseContainerWithStringDefaultFound(): void
     {
         $container = $this->createMock(\Mimmi20\Mezzio\Navigation\ContainerInterface::class);
@@ -124,6 +166,44 @@ final class ContainerParserTest extends TestCase
         $serviceLocator->expects(self::once())
             ->method('get')
             ->with(MezzioNavigation::class)
+            ->willReturn($container);
+
+        assert($serviceLocator instanceof ContainerInterface);
+        $helper = new ContainerParser($serviceLocator);
+
+        self::assertSame($container, $helper->parseContainer('default'));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function testParseContainerWithStringDefaultFound2(): void
+    {
+        $container = $this->createMock(AbstractContainer::class);
+
+        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $matcher        = self::exactly(2);
+        $serviceLocator->expects($matcher)
+            ->method('has')
+            ->willReturnCallback(
+                static function (string $id) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(MezzioNavigation::class, $id),
+                        default => self::assertSame(LaminasNavigation::class, $id),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => true,
+                        default => false,
+                    };
+                },
+            );
+        $serviceLocator->expects(self::once())
+            ->method('get')
+            ->with(LaminasNavigation::class)
             ->willReturn($container);
 
         assert($serviceLocator instanceof ContainerInterface);
