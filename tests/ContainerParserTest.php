@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace Mimmi20Test\NavigationHelper\ContainerParser;
 
+use AssertionError;
 use Laminas\Navigation\AbstractContainer;
 use Laminas\Navigation\Navigation as LaminasNavigation;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
@@ -400,5 +401,170 @@ final class ContainerParserTest extends TestCase
         $helper = new ContainerParser($serviceLocator);
 
         self::assertSame($container, $helper->parseContainer($container));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function testParseContainerWithStringDefaultNotFound3(): void
+    {
+        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $serviceLocator->expects(self::once())
+            ->method('has')
+            ->with(MezzioNavigation::class)
+            ->willReturn(true);
+        $serviceLocator->expects(self::once())
+            ->method('get')
+            ->with(MezzioNavigation::class)
+            ->willReturn(null);
+
+        assert($serviceLocator instanceof ContainerInterface);
+        $helper = new ContainerParser($serviceLocator);
+
+        $this->expectException(AssertionError::class);
+        $this->expectExceptionCode(1);
+        $this->expectExceptionMessage(
+            sprintf(
+                '$container should be an Instance of %s, but was %s',
+                \Mimmi20\Mezzio\Navigation\ContainerInterface::class,
+                'null',
+            ),
+        );
+
+        $helper->parseContainer('default');
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function testParseContainerWithStringDefaultNotFound4(): void
+    {
+        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $matcher        = self::exactly(2);
+        $serviceLocator->expects($matcher)
+            ->method('has')
+            ->willReturnCallback(
+                static function (string $id) use ($matcher): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(MezzioNavigation::class, $id),
+                        default => self::assertSame(LaminasNavigation::class, $id),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        2 => true,
+                        default => false,
+                    };
+                },
+            );
+        $serviceLocator->expects(self::once())
+            ->method('get')
+            ->with(LaminasNavigation::class)
+            ->willReturn(null);
+
+        assert($serviceLocator instanceof ContainerInterface);
+        $helper = new ContainerParser($serviceLocator);
+
+        $this->expectException(AssertionError::class);
+        $this->expectExceptionCode(1);
+        $this->expectExceptionMessage(
+            sprintf(
+                '$container should be an Instance of %s, but was %s',
+                AbstractContainer::class,
+                'null',
+            ),
+        );
+
+        $helper->parseContainer('default');
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function testParseContainerWithStringNavigationNotFound2(): void
+    {
+        $name = 'navigation';
+
+        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $matcher        = self::exactly(3);
+        $serviceLocator->expects($matcher)
+            ->method('has')
+            ->willReturnCallback(
+                static function (string $id) use ($matcher, $name): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(MezzioNavigation::class, $id),
+                        2 => self::assertSame(LaminasNavigation::class, $id),
+                        default => self::assertSame($name, $id),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        3 => true,
+                        default => false,
+                    };
+                },
+            );
+        $serviceLocator->expects(self::once())
+            ->method('get')
+            ->with($name)
+            ->willReturn(null);
+
+        assert($serviceLocator instanceof ContainerInterface);
+        $helper = new ContainerParser($serviceLocator);
+
+        $this->expectException(AssertionError::class);
+        $this->expectExceptionCode(1);
+        $this->expectExceptionMessage(
+            sprintf(
+                '$container should be an Instance of %s or %s, but was %s',
+                \Mimmi20\Mezzio\Navigation\ContainerInterface::class,
+                AbstractContainer::class,
+                'null',
+            ),
+        );
+
+        $helper->parseContainer($name);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function testParseContainerWithStringNotFound(): void
+    {
+        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+
+        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::once())
+            ->method('get')
+            ->with($name)
+            ->willReturn(null);
+
+        assert($serviceLocator instanceof ContainerInterface);
+        $helper = new ContainerParser($serviceLocator);
+
+        $this->expectException(AssertionError::class);
+        $this->expectExceptionCode(1);
+        $this->expectExceptionMessage(
+            sprintf(
+                '$container should be an Instance of %s or %s, but was %s',
+                \Mimmi20\Mezzio\Navigation\ContainerInterface::class,
+                AbstractContainer::class,
+                'null',
+            ),
+        );
+
+        $helper->parseContainer($name);
     }
 }
