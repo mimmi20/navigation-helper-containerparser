@@ -1,9 +1,8 @@
 {
   "name": "mimmi20/navigation-helper-containerparser",
-  "type": "library",
   "description": "Provides a container-parser helper for Laminas- and Mezzio Navigation",
-  "homepage": "https://github.com/mimmi20/navigation-helper-containerparser",
   "license": "MIT",
+  "type": "library",
   "authors": [
     {
       "name": "Thomas Müller",
@@ -11,6 +10,11 @@
       "role": "Developer"
     }
   ],
+  "homepage": "https://github.com/mimmi20/navigation-helper-containerparser",
+  "support": {
+    "issues": "https://github.com/mimmi20/navigation-helper-containerparser/issues",
+    "source": "https://github.com/mimmi20/navigation-helper-containerparser"
+  },
   "require": {
     "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
     "laminas/laminas-stdlib": "^3.19.0",
@@ -59,20 +63,15 @@
       "Mimmi20Test\\NavigationHelper\\ContainerParser\\": "tests/"
     }
   },
-  "support": {
-    "issues": "https://github.com/mimmi20/navigation-helper-containerparser/issues",
-    "source": "https://github.com/mimmi20/navigation-helper-containerparser"
-  },
   "config": {
-    "preferred-install": "dist",
-    "lock": false,
-    "sort-packages": true,
     "allow-plugins": {
-      "laminas/laminas-dependency-plugin": true,
       "dealerdirect/phpcodesniffer-composer-installer": true,
-      "phpstan/extension-installer": true,
-      "infection/extension-installer": true
-    }
+      "infection/extension-installer": true,
+      "phpstan/extension-installer": true
+    },
+    "lock": false,
+    "preferred-install": "dist",
+    "sort-packages": true
   },
   "extra": {
     "laminas": {
