@@ -18,6 +18,7 @@ use Laminas\Navigation\Page\AbstractPage;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Mimmi20\Mezzio\Navigation\Navigation as MezzioNavigation;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
+use Override;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
@@ -27,10 +28,10 @@ use function in_array;
 use function is_string;
 use function sprintf;
 
-final class ContainerParser implements ContainerParserInterface
+final readonly class ContainerParser implements ContainerParserInterface
 {
     /** @throws void */
-    public function __construct(private readonly ContainerInterface $serviceLocator)
+    public function __construct(private ContainerInterface $serviceLocator)
     {
         // nothing to do
     }
@@ -44,6 +45,7 @@ final class ContainerParser implements ContainerParserInterface
      *
      * @throws InvalidArgumentException
      */
+    #[Override]
     public function parseContainer(
         AbstractContainer | int | \Mimmi20\Mezzio\Navigation\ContainerInterface | string | null $container = null,
     ): AbstractContainer | \Mimmi20\Mezzio\Navigation\ContainerInterface | null {
