@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the mimmi20/navigation-helper-containerparser package.
  *
@@ -21,16 +22,18 @@ final class ContainerParserFactory implements FactoryInterface
     /**
      * Create and return a navigation view helper instance.
      *
+     * @param string            $requestedName
      * @param array<mixed>|null $options
      *
      * @throws void
      *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
     #[Override]
     public function __invoke(
         ContainerInterface $container,
-        string $requestedName,
+        $requestedName,
         array | null $options = null,
     ): ContainerParser {
         return new ContainerParser($container);
