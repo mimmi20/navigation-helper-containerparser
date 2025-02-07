@@ -17,6 +17,7 @@
   },
   "require": {
     "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+    "laminas/laminas-servicemanager": "^3.23.0",
     "laminas/laminas-stdlib": "^3.20.0",
     "psr/container": "^1.1.2 || ^2.0.2"
   },
@@ -31,7 +32,6 @@
     "infection/infection": "^0.29.10",
     "laminas/laminas-modulemanager": "^2.17.0",
     "laminas/laminas-navigation": "^2.20.0",
-    "laminas/laminas-servicemanager": "^3.23.0",
     "mimmi20/coding-standard": "^6.0.10",
     "mimmi20/mezzio-navigation": "^4.0.3",
     "nikic/php-parser": "^5.4.0",

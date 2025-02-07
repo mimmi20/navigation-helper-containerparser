@@ -34,30 +34,8 @@ updates:
       prefix: "composer"
 
     ignore:
-      - dependency-name: "browscap/browscap"
-      - dependency-name: "elasticsearch/elasticsearch"
-      - dependency-name: "endorphin-studio/browser-detector-tests"
-      - dependency-name: "illuminate/config"
-      - dependency-name: "illuminate/container"
-      - dependency-name: "illuminate/contracts"
-      - dependency-name: "illuminate/events"
-      - dependency-name: "illuminate/filesystem"
-      - dependency-name: "illuminate/view"
-      - dependency-name: "infection/infection"
-      - dependency-name: "laminas/laminas-diactoros"
       - dependency-name: "laminas/laminas-servicemanager"
-      - dependency-name: "nikic/php-parser"
-      - dependency-name: "phpunit/phpunit"
-      - dependency-name: "predis/predis"
       - dependency-name: "psr/container"
-      - dependency-name: "psr/http-message"
-      - dependency-name: "psr/log"
-      - dependency-name: "psr/simple-cache"
-      - dependency-name: "symfony/console"
-      - dependency-name: "symfony/filesystem"
-      - dependency-name: "symfony/finder"
-      - dependency-name: "symfony/http-foundation"
-      - dependency-name: "symfony/yaml"
 
     rebase-strategy: "auto"
 
@@ -85,6 +63,71 @@ updates:
 
     commit-message:
       prefix: "github-actions"
+
+    ignore:
+      - dependency-name: "mimmi20/ci"
+      - dependency-name: "release-drafter/release-drafter"
+
+    rebase-strategy: "auto"
+
+  - package-ecosystem: "composer"
+
+    directory: "/"
+
+    schedule:
+      interval: "daily"
+      time: "04:00"
+      timezone: "Europe/Berlin"
+
+    open-pull-requests-limit: 10
+
+    reviewers:
+      - "mimmi20"
+
+    assignees:
+      - "mimmi20"
+
+    labels:
+      - "dependencies"
+
+    versioning-strategy: "increase"
+
+    target-branch: "5.x"
+
+    commit-message:
+      include: "scope"
+      prefix: "composer (5.x)"
+
+    ignore:
+      - dependency-name: "laminas/laminas-servicemanager"
+      - dependency-name: "psr/container"
+
+    rebase-strategy: "auto"
+
+  - package-ecosystem: "github-actions"
+
+    directory: "/"
+
+    schedule:
+      interval: "daily"
+      time: "04:00"
+      timezone: "Europe/Berlin"
+
+    open-pull-requests-limit: 10
+
+    reviewers:
+      - "mimmi20"
+
+    assignees:
+      - "mimmi20"
+
+    labels:
+      - "dependencies"
+
+    target-branch: "5.x"
+
+    commit-message:
+      prefix: "github-actions (5.x)"
 
     ignore:
       - dependency-name: "mimmi20/ci"
