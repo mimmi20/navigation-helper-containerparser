@@ -22,18 +22,16 @@ final class ContainerParserFactory implements FactoryInterface
     /**
      * Create and return a navigation view helper instance.
      *
-     * @param string            $requestedName
      * @param array<mixed>|null $options
      *
      * @throws void
      *
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
     #[Override]
     public function __invoke(
         ContainerInterface $container,
-        $requestedName,
+        string $requestedName,
         array | null $options = null,
     ): ContainerParser {
         return new ContainerParser($container);
