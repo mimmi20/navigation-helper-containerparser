@@ -15,7 +15,6 @@ namespace Mimmi20Test\NavigationHelper\ContainerParser;
 
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParser;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserFactory;
-use Override;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -24,15 +23,6 @@ use function assert;
 
 final class ContainerParserFactoryTest extends TestCase
 {
-    private ContainerParserFactory $factory;
-
-    /** @throws void */
-    #[Override]
-    protected function setUp(): void
-    {
-        $this->factory = new ContainerParserFactory();
-    }
-
     /** @throws Exception */
     public function testInvocation(): void
     {
@@ -43,7 +33,7 @@ final class ContainerParserFactoryTest extends TestCase
             ->method('get');
 
         assert($container instanceof ContainerInterface);
-        $helper = ($this->factory)($container, '');
+        $helper = (new ContainerParserFactory())($container, '');
 
         self::assertInstanceOf(ContainerParser::class, $helper);
     }
