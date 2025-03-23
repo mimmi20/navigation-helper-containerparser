@@ -20,6 +20,7 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Mimmi20\Mezzio\Navigation\Navigation as MezzioNavigation;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParser;
+use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -153,6 +154,8 @@ final class ContainerParserTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testParseContainerWithStringDefaultFound(): void
     {
@@ -179,6 +182,8 @@ final class ContainerParserTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testParseContainerWithStringDefaultFound2(): void
     {
@@ -260,6 +265,8 @@ final class ContainerParserTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testParseContainerWithStringNavigationFound(): void
     {
@@ -300,6 +307,8 @@ final class ContainerParserTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testParseContainerWithStringNavigationFound2(): void
     {
@@ -380,6 +389,8 @@ final class ContainerParserTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testParseContainerWithStringFound(): void
     {
@@ -405,6 +416,8 @@ final class ContainerParserTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testParseContainerWithStringFound2(): void
     {
@@ -430,6 +443,8 @@ final class ContainerParserTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testParseContainerWithContainer(): void
     {
@@ -451,6 +466,8 @@ final class ContainerParserTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testParseContainerWithContainer2(): void
     {
