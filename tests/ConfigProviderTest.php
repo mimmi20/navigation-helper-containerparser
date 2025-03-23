@@ -16,25 +16,15 @@ namespace Mimmi20Test\NavigationHelper\ContainerParser;
 use Mimmi20\NavigationHelper\ContainerParser\ConfigProvider;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParser;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Override;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 final class ConfigProviderTest extends TestCase
 {
-    private ConfigProvider $provider;
-
-    /** @throws void */
-    #[Override]
-    protected function setUp(): void
-    {
-        $this->provider = new ConfigProvider();
-    }
-
     /** @throws Exception */
     public function testReturnedArrayContainsDependencies(): void
     {
-        $config = ($this->provider)();
+        $config = (new ConfigProvider())();
         self::assertIsArray($config);
         self::assertCount(1, $config);
         self::assertArrayHasKey('dependencies', $config);
@@ -59,7 +49,7 @@ final class ConfigProviderTest extends TestCase
     /** @throws Exception */
     public function testReturnedArrayContainsDependencies2(): void
     {
-        $dependencies = $this->provider->getDependencyConfig();
+        $dependencies = (new ConfigProvider())->getDependencyConfig();
         self::assertIsArray($dependencies);
         self::assertCount(2, $dependencies);
         self::assertArrayHasKey('factories', $dependencies);
