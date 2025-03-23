@@ -31,7 +31,7 @@ updates:
 
     commit-message:
       include: "scope"
-      prefix: "composer"
+      prefix: "composer (master)"
 
     ignore:
       - dependency-name: "psr/container"
@@ -61,7 +61,7 @@ updates:
     target-branch: "master"
 
     commit-message:
-      prefix: "github-actions"
+      prefix: "github-actions (master)"
 
     ignore:
       - dependency-name: "mimmi20/ci"
