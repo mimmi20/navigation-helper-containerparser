@@ -1,6 +1,6 @@
 {
   "name": "mimmi20/navigation-helper-containerparser",
-  "description": "Provides a container-parser helper for Laminas- and Mezzio Navigation",
+  "description": "Provides a helper for Mezzio Navigation",
   "license": "MIT",
   "type": "library",
   "authors": [
